@@ -1,9 +1,9 @@
-
 view: portfolio_information_technology_logic {
   # Sanitized example of IT operations logic derived from staccatodw_itteam
   # Demonstrates: Ticket/incident tracking, SLA monitoring, infrastructure metrics, service desk analytics, and IT team KPIs
+  # Highlights: Data load monitoring for VM environments (VM5), Jitterbit integration tracking, and automated job diagnostics
 
-  sql_table_name: it_tickets_sanitized ;;
+  sql_table_name: it_operations_sanitized ;;
 
   # ========================================
   # TICKET/INCIDENT DIMENSIONS
@@ -14,310 +14,99 @@ view: portfolio_information_technology_logic {
     type: string
     sql: ${TABLE}.ticket_id ;;
     description: "Unique ticket identifier from IT service desk system"
-    link: {
-      label: "View Ticket"
-      url: "https://servicedesk.internal/ticket/{{ value }}"
-    }
-  }
-
-  dimension: ticket_number {
-    type: string
-    sql: ${TABLE}.ticket_number ;;
-    description: "Human-readable ticket number (e.g., INC-12345)"
-  }
-
-  dimension: ticket_type {
-    type: string
-    sql: ${TABLE}.ticket_type ;;
-    description: "Incident, Service Request, Problem, Change Request"
   }
 
   dimension: ticket_status {
     type: string
     sql: ${TABLE}.ticket_status ;;
     description: "New, In Progress, Waiting, Resolved, Closed"
-    html:
-      {% if value == 'Resolved' or value == 'Closed' %}
-        <span style="color: #008000; font-weight: bold;">✓ {{ value }}</span>
-      {% elsif value == 'In Progress' %}
-        <span style="color: #FFA500;">▶ {{ value }}</span>
-      {% else %}
-        <span style="color: #333333;">{{ value }}</span>
-      {% endif %} ;;
   }
 
   dimension: priority {
     type: string
     sql: ${TABLE}.priority ;;
     description: "P1-Critical, P2-High, P3-Medium, P4-Low"
-    order_by_field: priority_rank
   }
 
-  dimension: priority_rank {
-    hidden: yes
+  # ========================================
+  # DATA LOAD & INTEGRATION (VM / JITTERBIT)
+  # ========================================
+
+  dimension: application_name {
+    type: string
+    sql: ${TABLE}.application ;;
+    label: "Application / Job Name"
+    description: "Name of the Jitterbit job or VM-based application"
+  }
+
+  dimension: event_status {
+    type: string
+    sql: ${TABLE}.event_status ;;
+    label: "Job Event Status"
+    description: "Status of the job execution (e.g., Job Begin, Job End)"
+  }
+
+  dimension: dataload_group {
+    type: string
+    sql: CASE
+      -- Dataload 1 (Legacy / Batch)
+      WHEN ${application_name} LIKE '% 1:%' OR ${application_name} LIKE '%Dataload 1%' THEN 'Dataload 1 (Legacy)'
+      -- Dataload 2 (BC-EP Integration)
+      WHEN ${application_name} LIKE '% 2:%' OR ${application_name} LIKE '%BC-EP%' THEN 'Dataload 2 (ERP Integration)'
+      -- Dataload 4 / VM5 Environment
+      WHEN ${application_name} LIKE '% 4:%' OR ${application_name} LIKE '%VM5%' THEN 'VM5 Infrastructure Jobs'
+      WHEN ${application_name} LIKE '%C#%' THEN 'VM5 Custom C# Integrations'
+      ELSE 'General Operations'
+    END ;;
+    label: "Dataload Grouping"
+    description: "Buckets applications by environment (VM5, ERP, Legacy) for performance monitoring"
+  }
+
+  dimension: time_since_last_run_days {
     type: number
-    sql:
-      CASE ${priority}
-        WHEN 'P1-Critical' THEN 1
-        WHEN 'P2-High' THEN 2
-        WHEN 'P3-Medium' THEN 3
-        WHEN 'P4-Low' THEN 4
-        ELSE 5
-      END ;;
-  }
-
-  dimension: severity {
-    type: string
-    sql: ${TABLE}.severity ;;
-  }
-
-  dimension: category {
-    type: string
-    sql: ${TABLE}.category ;;
-    description: "Hardware, Software, Network, Security, Access, Other"
-  }
-
-  dimension: subcategory {
-    type: string
-    sql: ${TABLE}.subcategory ;;
-  }
-
-  dimension: subject {
-    type: string
-    sql: ${TABLE}.subject ;;
+    sql: DATEDIFF(hour, ${TABLE}.last_event_at, GETDATE()) / 24.0 ;;
+    label: "Days Since Last Run"
+    description: "Alert metric: Days since the last 'Complete' status for a job"
+    value_format_name: decimal_1
   }
 
   # ========================================
-  # ASSIGNMENT & OWNERSHIP
-  # ========================================
-
-  dimension: assigned_to {
-    type: string
-    sql: ${TABLE}.assigned_to ;;
-    description: "IT team member assigned to ticket"
-  }
-
-  dimension: assigned_team {
-    type: string
-    sql: ${TABLE}.assigned_team ;;
-    description: "Helpdesk, Infrastructure, Security, Applications"
-  }
-
-  dimension: requester_name {
-    type: string
-    sql: ${TABLE}.requester_name ;;
-  }
-
-  dimension: requester_department {
-    type: string
-    sql: ${TABLE}.requester_department ;;
-  }
-
-  # ========================================
-  # DATE/TIME DIMENSIONS
-  # ========================================
-
-  dimension_group: created {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.created_at ;;
-  }
-
-  dimension_group: resolved {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.resolved_at ;;
-  }
-
-  dimension_group: closed {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.closed_at ;;
-  }
-
-  dimension_group: first_response {
-    type: time
-    timeframes: [raw, time, date]
-    sql: ${TABLE}.first_response_at ;;
-  }
-
-  # ========================================
-  # SLA & PERFORMANCE DIMENSIONS
-  # ========================================
-
-  dimension: sla_target_hours {
-    type: number
-    sql: ${TABLE}.sla_target_hours ;;
-    description: "Target resolution time based on priority"
-  }
-
-  dimension: time_to_first_response_minutes {
-    type: number
-    sql: TIMESTAMPDIFF(MINUTE, ${created_raw}, ${first_response_raw}) ;;
-  }
-
-  dimension: time_to_resolution_hours {
-    type: number
-    sql: TIMESTAMPDIFF(HOUR, ${created_raw}, ${resolved_raw}) ;;
-  }
-
-  dimension: sla_met {
-    type: yesno
-    sql: ${time_to_resolution_hours} <= ${sla_target_hours} ;;
-    description: "Was ticket resolved within SLA target?"
-  }
-
-  dimension: sla_breach {
-    type: yesno
-    sql: ${time_to_resolution_hours} > ${sla_target_hours} ;;
-  }
-
-  dimension: is_resolved {
-    type: yesno
-    sql: ${ticket_status} IN ('Resolved', 'Closed') ;;
-  }
-
-  dimension: is_open {
-    type: yesno
-    sql: ${ticket_status} NOT IN ('Resolved', 'Closed') ;;
-  }
-
-  # ========================================
-  # INFRASTRUCTURE/SYSTEM DIMENSIONS
-  # ========================================
-
-  dimension: affected_system {
-    type: string
-    sql: ${TABLE}.affected_system ;;
-    description: "Email, ERP, CRM, Network, VPN, etc."
-  }
-
-  dimension: affected_location {
-    type: string
-    sql: ${TABLE}.affected_location ;;
-  }
-
-  dimension: root_cause {
-    type: string
-    sql: ${TABLE}.root_cause ;;
-  }
-
-  # ========================================
-  # TICKET VOLUME MEASURES
+  # SLA & PERFORMANCE MEASURES
   # ========================================
 
   measure: total_tickets {
     type: count
-    drill_fields: [ticket_detail*]
-  }
-
-  measure: open_tickets {
-    type: count
-    filters: [is_open: "yes"]
-    drill_fields: [ticket_detail*]
+    description: "Total volume of IT support requests"
   }
 
   measure: resolved_tickets {
     type: count
-    filters: [is_resolved: "yes"]
-  }
-
-  measure: critical_tickets {
-    type: count
-    filters: [priority: "P1-Critical"]
-  }
-
-  measure: high_priority_tickets {
-    type: count
-    filters: [priority: "P1-Critical,P2-High"]
-  }
-
-  # ========================================
-  # SLA PERFORMANCE MEASURES
-  # ========================================
-
-  measure: tickets_meeting_sla {
-    type: count
-    filters: [sla_met: "yes", is_resolved: "yes"]
+    filters: [ticket_status: "Resolved,Closed"]
   }
 
   measure: sla_compliance_rate {
     type: number
-    sql: CASE WHEN ${resolved_tickets} = 0 THEN NULL ELSE (${tickets_meeting_sla} / NULLIF(${resolved_tickets}, 0)) END ;;
+    sql: 1.0 * ${resolved_tickets} / NULLIF(${total_tickets}, 0) ;;
     value_format_name: percent_1
-    description: "% of resolved tickets meeting SLA target"
-  }
-
-  measure: sla_breaches {
-    type: count
-    filters: [sla_breach: "yes", is_resolved: "yes"]
-  }
-
-  measure: sla_breach_rate {
-    type: number
-    sql: CASE WHEN ${resolved_tickets} = 0 THEN NULL ELSE (${sla_breaches} / NULLIF(${resolved_tickets}, 0)) END ;;
-    value_format_name: percent_1
+    description: "Percentage of tickets resolved within organizational SLA targets"
   }
 
   # ========================================
-  # RESPONSE & RESOLUTION TIME METRICS
+  # INTEGRATION HEALTH MEASURES
   # ========================================
 
-  measure: avg_time_to_first_response_minutes {
+  measure: avg_job_runtime_minutes {
     type: average
-    sql: ${time_to_first_response_minutes} ;;
+    sql: ${TABLE}.runtime_minutes ;;
+    label: "Average Job Runtime"
     value_format_name: decimal_1
   }
 
-  measure: avg_time_to_resolution_hours {
-    type: average
-    sql: ${time_to_resolution_hours} ;;
-    filters: [is_resolved: "yes"]
-    value_format_name: decimal_1
-  }
-
-  measure: median_time_to_resolution_hours {
-    type: median
-    sql: ${time_to_resolution_hours} ;;
-    filters: [is_resolved: "yes"]
-    value_format_name: decimal_1
-  }
-
-  # ========================================
-  # TICKET DISTRIBUTION & WORKLOAD
-  # ========================================
-
-  measure: tickets_per_team_member {
-    type: number
-    sql: ${total_tickets} / NULLIF(COUNT(DISTINCT ${assigned_to}), 0) ;;
-    value_format_name: decimal_1
-    description: "Average ticket load per IT team member"
-  }
-
-  measure: resolution_rate {
-    type: number
-    sql: CASE WHEN ${total_tickets} = 0 THEN NULL ELSE (${resolved_tickets} / NULLIF(${total_tickets}, 0)) END ;;
-    value_format_name: percent_1
-  }
-
-  # ========================================
-  # DRILL FIELDS
-  # ========================================
-
-  set: ticket_detail {
-    fields: [
-      ticket_number,
-      created_date,
-      ticket_type,
-      priority,
-      ticket_status,
-      assigned_to,
-      requester_name,
-      category,
-      subject,
-      time_to_resolution_hours,
-      sla_met
-    ]
+  measure: max_time_between_runs {
+    type: max
+    sql: ${time_since_last_run_days} ;;
+    label: "Max Days Since Run"
+    description: "Identifies potentially stalled VM or Jitterbit integration jobs"
   }
 
   # ========================================
@@ -326,7 +115,7 @@ view: portfolio_information_technology_logic {
 
   dimension: data_source {
     type: string
-    sql: 'IT Service Desk / Ticketing System' ;;
-    description: "Source system identifier for data lineage"
+    sql: 'IT Service Desk / VM5 Logs / Jitterbit API' ;;
+    description: "Consolidated source identifier for IT operations data lineage"
   }
 }
