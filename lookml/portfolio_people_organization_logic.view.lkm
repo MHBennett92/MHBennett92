@@ -1,1 +1,339 @@
 
+view: portfolio_people_organization_logic {
+  # Sanitized example of HR/People analytics logic derived from staccatodw_hr
+  # Demonstrates: Headcount tracking, Paylocity integration patterns, turnover analysis, tenure calculations, and org metrics
+
+  sql_table_name: employee_data_sanitized ;;
+
+  # ========================================
+  # EMPLOYEE DIMENSIONS
+  # ========================================
+
+  dimension: employee_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.employee_id ;;
+    description: "Unique employee identifier from Paylocity HRIS"
+  }
+
+  dimension: employee_name {
+    type: string
+    sql: ${TABLE}.employee_name ;;
+  }
+
+  dimension: employee_number {
+    type: string
+    sql: ${TABLE}.employee_number ;;
+    description: "Paylocity employee number"
+  }
+
+  dimension: email {
+    type: string
+    sql: ${TABLE}.email ;;
+  }
+
+  # ========================================
+  # EMPLOYMENT STATUS & CLASSIFICATION
+  # ========================================
+
+  dimension: employment_status {
+    type: string
+    sql: ${TABLE}.employment_status ;;
+    description: "Active, Terminated, Leave of Absence, etc."
+  }
+
+  dimension: is_active {
+    type: yesno
+    sql: ${employment_status} = 'Active' ;;
+  }
+
+  dimension: employment_type {
+    type: string
+    sql: ${TABLE}.employment_type ;;
+    description: "Full-Time, Part-Time, Contractor, Intern"
+  }
+
+  dimension: exempt_status {
+    type: string
+    sql: ${TABLE}.exempt_status ;;
+    description: "Exempt vs. Non-Exempt (FLSA classification)"
+  }
+
+  # ========================================
+  # ORGANIZATIONAL HIERARCHY
+  # ========================================
+
+  dimension: department {
+    type: string
+    sql: ${TABLE}.department ;;
+    drill_fields: [team, employee_name]
+  }
+
+  dimension: team {
+    type: string
+    sql: ${TABLE}.team ;;
+  }
+
+  dimension: job_title {
+    type: string
+    sql: ${TABLE}.job_title ;;
+  }
+
+  dimension: job_level {
+    type: string
+    sql: ${TABLE}.job_level ;;
+    description: "IC, Manager, Director, VP, C-Level"
+  }
+
+  dimension: manager_name {
+    type: string
+    sql: ${TABLE}.manager_name ;;
+  }
+
+  dimension: location {
+    type: string
+    sql: ${TABLE}.location ;;
+    description: "Office location or Remote"
+  }
+
+  dimension: cost_center {
+    type: string
+    sql: ${TABLE}.cost_center ;;
+  }
+
+  # ========================================
+  # DATE DIMENSIONS (Hire, Term, Tenure)
+  # ========================================
+
+  dimension_group: hire {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.hire_date ;;
+  }
+
+  dimension_group: termination {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    sql: ${TABLE}.termination_date ;;
+  }
+
+  dimension: termination_reason {
+    type: string
+    sql: ${TABLE}.termination_reason ;;
+    description: "Voluntary, Involuntary, Retirement, etc."
+  }
+
+  dimension: tenure_days {
+    type: number
+    sql:
+      CASE
+        WHEN ${employment_status} = 'Active' THEN DATEDIFF('day', ${hire_raw}, CURRENT_DATE)
+        ELSE DATEDIFF('day', ${hire_raw}, ${termination_raw})
+      END ;;
+  }
+
+  dimension: tenure_years {
+    type: number
+    sql: ${tenure_days} / 365.25 ;;
+    value_format_name: decimal_1
+  }
+
+  dimension: tenure_bucket {
+    type: tier
+    tiers: [0.5, 1, 2, 3, 5, 10]
+    style: integer
+    sql: ${tenure_years} ;;
+    description: "Tenure grouped into buckets: <6mo, 6mo-1yr, 1-2yr, etc."
+  }
+
+  # ========================================
+  # COMPENSATION (Sanitized)
+  # ========================================
+
+  dimension: annual_salary {
+    type: number
+    sql: ${TABLE}.annual_salary ;;
+    value_format_name: usd_0
+    description: "Base salary from Paylocity"
+  }
+
+  dimension: hourly_rate {
+    type: number
+    sql: ${TABLE}.hourly_rate ;;
+    value_format_name: usd
+  }
+
+  dimension: pay_frequency {
+    type: string
+    sql: ${TABLE}.pay_frequency ;;
+    description: "Salary, Hourly, etc."
+  }
+
+  # ========================================
+  # HEADCOUNT MEASURES
+  # ========================================
+
+  measure: total_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    description: "Total unique employees (includes active and terminated)"
+    drill_fields: [employee_name, department, job_title, employment_status]
+  }
+
+  measure: active_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [is_active: "yes"]
+    description: "Current active employees"
+    drill_fields: [employee_name, department, job_title, hire_date]
+  }
+
+  measure: terminated_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [employment_status: "Terminated"]
+  }
+
+  measure: full_time_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [employment_type: "Full-Time", is_active: "yes"]
+  }
+
+  measure: part_time_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [employment_type: "Part-Time", is_active: "yes"]
+  }
+
+  measure: contractor_headcount {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [employment_type: "Contractor", is_active: "yes"]
+  }
+
+  # ========================================
+  # TURNOVER & RETENTION ANALYTICS
+  # ========================================
+
+  measure: hires_count {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [hire_date: "NOT NULL"]
+    description: "Number of new hires in selected period"
+  }
+
+  measure: terminations_count {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [termination_date: "NOT NULL"]
+  }
+
+  measure: voluntary_terminations {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [termination_reason: "Voluntary"]
+  }
+
+  measure: involuntary_terminations {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [termination_reason: "Involuntary"]
+  }
+
+  measure: turnover_rate {
+    type: number
+    sql: CASE WHEN ${active_headcount} = 0 THEN NULL ELSE (${terminations_count} / NULLIF(${active_headcount}, 0)) END ;;
+    value_format_name: percent_1
+    description: "Terminations / Active Headcount"
+  }
+
+  measure: voluntary_turnover_rate {
+    type: number
+    sql: CASE WHEN ${active_headcount} = 0 THEN NULL ELSE (${voluntary_terminations} / NULLIF(${active_headcount}, 0)) END ;;
+    value_format_name: percent_1
+  }
+
+  # ========================================
+  # TENURE & TIME-BASED METRICS
+  # ========================================
+
+  measure: average_tenure_days {
+    type: average
+    sql: ${tenure_days} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: average_tenure_years {
+    type: average
+    sql: ${tenure_years} ;;
+    value_format_name: decimal_1
+    description: "Average employee tenure in years"
+  }
+
+  measure: median_tenure_years {
+    type: median
+    sql: ${tenure_years} ;;
+    value_format_name: decimal_1
+  }
+
+  # ========================================
+  # COMPENSATION ANALYTICS
+  # ========================================
+
+  measure: total_annual_payroll {
+    type: sum
+    sql: ${annual_salary} ;;
+    filters: [is_active: "yes", pay_frequency: "Salary"]
+    value_format_name: usd_0
+    description: "Total active employee salaries"
+  }
+
+  measure: average_salary {
+    type: average
+    sql: ${annual_salary} ;;
+    filters: [is_active: "yes", pay_frequency: "Salary"]
+    value_format_name: usd_0
+  }
+
+  measure: median_salary {
+    type: median
+    sql: ${annual_salary} ;;
+    filters: [is_active: "yes", pay_frequency: "Salary"]
+    value_format_name: usd_0
+  }
+
+  # ========================================
+  # DIVERSITY & ORG METRICS (Sanitized)
+  # ========================================
+
+  measure: manager_count {
+    type: count_distinct
+    sql: ${employee_id} ;;
+    filters: [job_level: "Manager,Director,VP,C-Level", is_active: "yes"]
+    description: "Active employees in people management roles"
+  }
+
+  measure: span_of_control {
+    type: number
+    sql: ${active_headcount} / NULLIF(${manager_count}, 0) ;;
+    value_format_name: decimal_1
+    description: "Average number of employees per manager"
+  }
+
+  # ========================================
+  # PAYLOCITY INTEGRATION METADATA
+  # ========================================
+
+  dimension: paylocity_sync_date {
+    type: date
+    sql: ${TABLE}.paylocity_sync_date ;;
+    description: "Last sync timestamp from Paylocity API"
+  }
+
+  dimension: data_source {
+    type: string
+    sql: 'Paylocity HRIS' ;;
+    description: "Identifies source system for data lineage"
+  }
+}
