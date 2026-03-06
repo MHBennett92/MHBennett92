@@ -78,83 +78,97 @@ I design Looker dashboards as **analytics products**: clear information hierarch
 
 I build executive KPI boards, operational scorecards, and deep-dive pages that mix narrative text tiles, KPI "cards" (single-value), trend charts, and pivot/report-table tiles. I frequently use table calculations for goal/target overlays and progress-to-goal comparisons, plus consistent theming (colors, typography, spacing) and "newspaper" layouts for predictable scanning.
 
-### Sanitized LookML dashboard example
+### Sanitized LookML dashboard example (E-Commerce)
 
-Below is a sanitized pattern (structure only) showing the techniques I use: layout grid placement, HTML/CSS text tiles, single-value progress tiles, table calculations, and a dual-axis chart.
+Below is a sanitized structure based on my production **E-Commerce Executive Overview** and **Scorecard** dashboards. It demonstrates advanced layout techniques, YoY comparison logic, sparklines, and complex HTML/CSS text tiles.
 
 ```yaml
-- dashboard: enterprise_kpi_board
-  title: Enterprise KPI Board (Sanitized)
+- dashboard: ecom_executive_overview
+  title: E-commerce Executive Overview (Sanitized)
   layout: newspaper
+  preferred_viewer: dashboards-next
   elements:
-  - name: header
+  - name: header_banner
     type: text
     body_text: |
-      <div style="text-align: center; background: linear-gradient(135deg, #002856 0%, #004080 100%); padding: 20px; border-radius: 8px;">
-        <h1 style="color: white; margin: 0; font-size: 28px;">🎯 ENTERPRISE 🟢 Live</h1>
-        <p style="color: #b3d9ff; margin: 8px 0 0 0; font-size: 14px;">Performance KPIs · Drill-ready</p>
+      <div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding: 20px; background: linear-gradient(to bottom, #002856, #001f42); border-radius: 4px;">
+        <div style="position: relative; z-index: 2;">
+          <p style="font-family: 'Helvetica Neue', Helvetica, sans-serif; font-size: 32px; font-weight: 700; color: #FFFFFF; margin: 0;">ENTERPRISE E-COMMERCE</p>
+          <p style="font-family: 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; color: rgba(255, 255, 255, 0.85); margin: 8px 0 0 0;">Executive Performance Scorecard · 🟢 Live</p>
+        </div>
       </div>
     row: 0
     col: 0
     width: 24
     height: 3
 
-  - title: KPI vs Goal
-    name: kpi_vs_goal
-    model: Finance_Model
-    explore: gl_summary
+  - title: Sales (YoY)
+    name: sales_yoy
+    model: Ecom_Model
+    explore: sales_orders_profit
     type: single_value
-    fields: [gl_summary.kpi_value]
-    dynamic_fields:
-    - category: table_calculation
-      label: Goal
-      expression: "${gl_summary.kpi_value} * 0 + 100000"
-      value_format_name: decimal_0
-      table_calculation: goal
+    fields: [sales.revenue_ytd, sales.revenue_prior_ytd, sales.created_month, sales.revenue]
+    fill_fields: [sales.created_month]
     show_comparison: true
-    comparison_type: progress_percentage
-    comparison_label: Goal
+    comparison_label: YoY
+    comparison_type: percent
+    show_sparkline: true
+    sparkline_field: sales.revenue
     row: 3
     col: 0
     width: 6
-    height: 2
-
-  - title: Trend (Dual Axis)
-    name: trend_dual_axis
-    model: Finance_Model
-    explore: gl_summary
-    type: looker_column
-    fields: [gl_summary.month, gl_summary.metric_a, gl_summary.metric_b]
-    fill_fields: [gl_summary.month]
-    y_axes:
-    - orientation: left
-      series:
-      - id: gl_summary.metric_a
-    - orientation: right
-      series:
-      - id: gl_summary.metric_b
-    series_types:
-      gl_summary.metric_b: line
-    series_colors:
-      gl_summary.metric_a: "#002856"
-      gl_summary.metric_b: "#e02926"
-    row: 5
-    col: 0
-    width: 24
-    height: 4
-
-  - title: Monthly Table (Transpose)
-    name: monthly_table
-    model: Finance_Model
-    explore: gl_summary
-    type: marketplace_viz_report_table::report_table_visualization
-    fields: [gl_summary.month, gl_summary.revenue, gl_summary.ebitda]
-    transposeTable: true
-    useUnit: true
-    row: 9
-    col: 0
-    width: 24
     height: 3
+
+  - title: Sales Trend (Current vs Prior Year)
+    name: sales_trend
+    model: Ecom_Model
+    explore: sales_orders_profit
+    type: looker_line
+    fields: [sales.created_month_name, sales.revenue_prior_period, sales.revenue_current_period]
+    series_colors:
+      sales.revenue_current_period: "#002856"
+      sales.revenue_prior_period: "#7b8fa7"
+    series_labels:
+      sales.revenue_current_period: "Current Year"
+      sales.revenue_prior_period: "Prior Year"
+    x_axis_zoom: true
+    y_axis_zoom: true
+    row: 6
+    col: 0
+    width: 24
+    height: 7
+
+  - title: Sales by Product Category (Top 10)
+    name: sales_by_category
+    model: Ecom_Model
+    explore: sales_orders_products
+    type: looker_column
+    fields: [products.category, sales.revenue]
+    sorts: [sales.revenue desc]
+    limit: 10
+    show_value_labels: true
+    series_colors:
+      sales.revenue: "#002856"
+    row: 13
+    col: 0
+    width: 12
+    height: 7
+
+  - title: Top Products by Revenue
+    name: top_products
+    model: Ecom_Model
+    explore: sales_orders_products
+    type: looker_grid
+    fields: [products.name, sales.revenue, sales.quantity, sales.orders]
+    show_totals: true
+    table_theme: editable
+    series_text_format:
+      products.name: {align: left}
+      sales.revenue: {align: center}
+    row: 13
+    col: 12
+    width: 12
+    height: 7
 ```
 
 ### Performance + maintainability
