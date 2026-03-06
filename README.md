@@ -180,6 +180,27 @@ For dashboard performance at scale, I pair aggregate-aware explores with pre-agg
 
 I implement advanced patterns including Liquid templating (parameter-driven metrics/drills), derived tables and incremental PDTs, aggregate awareness with datagroups, refinements/extends for modular reuse, and role-based access controls with access grants/filters.
 
+### Sanitized LookML view example (Club Range Logic)
+
+The following sanitized view demonstrates a production-grade approach to handling membership activity and tiered logic within the **Club Range** pillar. It showcases SQL-based derived tables, Liquid-driven HTML formatting for member tiers, and parameter-based logic.
+
+👉 **[View: portfolio_club_range_logic.view.lkml](lookml/portfolio_club_range_logic.view.lkml)**
+
+---
+
+### Sanitized LookML view example (Finance — P&L, EBITDA, Gross Margin)
+
+The following sanitized view is derived from the private `staccatodw_finance` project and demonstrates real enterprise-grade financial metric logic. Key patterns showcased include:
+
+- **P&L structure** — Revenue, COGS, Gross Margin, and Operating Expenses as typed `sum` and `number` measures
+- **EBITDA** — Derived from Gross Margin minus Operating Expenses using measure references
+- **Gross Margin %** — A `number` measure using `NULLIF` to guard against division by zero
+- **GL Account categorization** — A `CASE` dimension dynamically bucketing GL account names into financial categories
+- **KPI HTML formatting** — Liquid-driven color coding on revenue attainment vs. budget (green/red threshold logic)
+- **Accounting Period dimension** — Supporting time-series P&L analysis
+
+👉 **[View: portfolio_finance_logic.view.lkml](lookml/portfolio_finance_logic.view.lkml)**
+
 ---
 
 ## Contact
