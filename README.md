@@ -3,8 +3,8 @@
 # Michael H. Bennett
 
 **FP&A Manager · Enterprise LookML Architect · BI Dashboard Designer**  
-Austin, TX · [LinkedIn](https://linkedin.com/in/mhbennett) · [GitHub](https://github.com/MHBennett92)  
-*M.S. Technology Management (4.0 GPA) · University of Arizona*
+Austin, TX · [LinkedIn](https://linkedin.com/in/mhbennett)
+*M.S. Technology Management · University of Arizona*
 
 </div>
 
