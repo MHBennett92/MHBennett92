@@ -203,6 +203,23 @@ The following sanitized view is derived from the private `staccatodw_finance` pr
 
 ---
 
+### Sanitized LookML view example (HR/People — Headcount, Paylocity, Turnover)
+
+The following sanitized view is derived from the private `staccatodw_hr` project and demonstrates enterprise-grade People Analytics logic. This view integrates directly with **Paylocity HRIS** and showcases patterns used in production for headcount tracking, turnover analysis, and organizational metrics.
+
+Key patterns showcased include:
+
+- **Headcount measures** — Active, terminated, FT/PT/contractor breakdowns using filtered `count_distinct`
+- **Turnover & retention** — Voluntary/involuntary termination tracking, turnover rate calculations
+- **Tenure analysis** — `DATEDIFF` logic for tenure in days/years, tenure bucketing with `type: tier`
+- **Paylocity integration** — Employee ID, employee number, sync date dimensions for HRIS data lineage
+- **Organizational hierarchy** — Department, team, job level, manager name dimensions with drill-down paths
+- **Compensation analytics** — Total payroll, average/median salary measures (sanitized)
+- **Span of control** — Manager count and employee-to-manager ratio
+- **Employment classification** — Active/terminated status, FT/PT/contractor, exempt/non-exempt (FLSA)
+
+👉 **[View: portfolio_people_organization_logic.view.lkm](lookml/portfolio_people_organization_logic.view.lkm)**
+
 ## Contact
 
 If you want to talk enterprise Looker architecture, KPI governance, or building dashboard products that finance leaders actually trust:
