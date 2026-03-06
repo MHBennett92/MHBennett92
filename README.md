@@ -20,48 +20,47 @@ I build governed, high-performance analytics products at the intersection of Fin
 
 ### Hub → pillars → spokes
 
-I designed and maintain a hub-and-spoke LookML ecosystem that scales across departments, data sources, and entities. The **Housing** project acts as the shared semantic layer hub; it connects directly to five core pillar projects (ECOM, S2011, HR, Finance, IT), and the remaining spoke projects sit under those pillars.
+I designed and maintain a hub-and-spoke LookML ecosystem that scales across departments, data sources, and entities. The **Housing** project acts as the shared semantic layer hub; it connects directly to core pillar projects (**ECOM, EPICOR, Club Range, HR, Finance, IT**), and the remaining spoke projects sit under those pillars.
 
 ```
-                 ┌──────────────────────┐
-                 │      HOUSING         │
-                 │ (Hub / Semantic Layer)│
-                 └───────┬─────┬────┬────┘
-                         │     │    │
-           ┌────────────┘     │    └────────────┐
-           │                  │                 │
-    ┌──────▼──────┐    ┌──────▼──────┐   ┌──────▼──────┐
-    │    ECOM     │    │    S2011    │   │     IT      │
-    │  (Pillar)   │    │  (Pillar)   │   │  (Pillar)   │
-    └──────┬───────┘    └──────┬───────┘   └──────┬───────┘
-           │                   │                  │
- ┌─────────────┼────────────┐  │      ┌───────────┼───────────┐
- │             │            │  │      │           │           │
-┌──────▼──────┐ ┌────▼─────┐ ┌────▼─────┐ ┌──▼──────┐ ┌──▼────────┐ ┌──▼──────────┐
-│  MARKETING  │ │    CX    │ │   CET    │ │   SFC   │ │Salesforce │ │ COMPLIANCE  │
-│   (Spoke)   │ │ (Spoke)  │ │ (Spoke)  │ │ (Spoke) │ │  (Spoke)  │ │ (Spoke/ATF) │
-└──────────────┘ └───────────┘ └──────────┘ └──────────┘ └───────────┘ └─────────────┘
+                         ┌──────────────────────┐
+                         │      HOUSING         │
+                         │ (Hub / Semantic Layer)│
+                         └───────┬─────┬────┬────┘
+                                 │     │    │
+           ┌────────────┬────────┴─────┼────┴────────┬────────────┐
+           │            │              │            │            │
+    ┌──────▼──────┐┌────▼─────┐ ┌──────▼──────┐┌────▼─────┐┌─────▼─────┐
+    │    ECOM     ││  EPICOR   │ │ Club Range  ││    HR    ││  FINANCE  │
+    │  (Pillar)   ││ (Pillar)  │ │  (Pillar)   ││ (Pillar) ││  (Pillar) │
+    └──────┬──────┘└────┬──────┘ └──────┬──────┘└────┬─────┘└─────┬─────┘
+           │            │               │            │            │
+           └────────────┼───────────────┘            │      ┌─────▼─────┐
+                        │                            │      │   AMMO    │
+          ┌─────────────┼────────────┐               │      │(Spoke/LHA)│
+          │             │            │               │      └─────┬─────┘
+   ┌──────▼──────┐ ┌────▼─────┐ ┌────▼─────┐  ┌──────▼─────┐      │
+   │  MARKETING  │ │    CX    │ │   CET    │  │     HR     │┌─────▼─────┐
+   │   (Spoke)   │ │ (Spoke)  │ │ (Spoke)  │  │  (Spoke)   ││    LHP    │
+   └──────────────┘ └──────────┘ └──────────┘  └────────────┘│(Subsidiary)│
+                                                             └────────────┘
+   ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+   │  LEO Sales   │ │  BD Sales   │ │  Salesforce  │
+   │   (Spoke)    │ │   (Spoke)   │ │   (Spoke)    │
+   └──────────────┘ └──────────────┘ └──────────────┘
 
-     ┌──────────────┐        ┌──────────────┐
-     │      HR      │        │   FINANCE    │
-     │   (Pillar)   │        │   (Pillar)   │
-     └──────┬───────┘        └──────┬───────┘
-            │                       │
-     ┌──────▼──────┐         ┌──────▼──────────┐
-     │      HR     │         │      AMMO       │
-     │   (Spoke)   │         │   (Spoke/LHA)   │
-     └──────────────┘         └──────┬──────────┘
-                                     │
-                              ┌──────▼──────────┐
-                              │       LHP       │
-                              │(Spoke/Subsidiary│
-                              └──────────────────┘
+    ┌──────────────────────┐
+    │          IT          │
+    │       (Pillar)       │
+    └──────────┬───────────┘
+               │
+        ┌──────▼──────┐
+        │ IT Data Team│
+        │   (Spoke)   │
+        └─────────────┘
 
-Under S2011 pillar (additional spokes):
-BD · LE Sales · Ranch/Vegas · Customer Excellence
-
-Under IT pillar (additional spokes):
-IT Data Team
+Pillar Grouping:
+Marketing, CX, CET, LEO Sales, Salesforce, and BD Sales are spokes under the ECOM, EPICOR, and Club Range pillars.
 ```
 
 ### Cross-project reuse and governance
