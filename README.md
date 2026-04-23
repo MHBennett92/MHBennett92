@@ -208,18 +208,6 @@ gantt
 
 ---
 
-## GitHub Stats
-
-<div align="center">
-
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=MHBennett92&show_icons=true&theme=default&title_color=002856&icon_color=002856&text_color=333333&bg_color=ffffff&hide_border=true)
-
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=MHBennett92&layout=compact&title_color=002856&text_color=333333&bg_color=ffffff&hide_border=true)
-
-</div>
-
----
-
 ## Contact
 
 Open to conversations about FP&A methodology, enterprise BI architecture, KPI governance, and building analytics platforms that finance leaders actually trust.
