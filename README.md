@@ -167,16 +167,29 @@ graph LR
 
 ---
 
-## SQL Learning Portfolio
+## SQL & LookML Learning Portfolio
 
-The `/sql` folder contains generic, tutorial-style SQL patterns I've written to demonstrate data modeling techniques commonly used in FP&A and BI work. These are illustrative examples built from publicly documented patterns — **not derived from any employer's proprietary code, schemas, or data**.
+The `/sql` folder contains generic, tutorial-style SQL and LookML patterns I've written to demonstrate data modeling techniques commonly used in FP&A and BI work — including subscription / membership analytics and finance-facing POS reporting. These are illustrative examples built from publicly documented patterns — **not derived from any employer's proprietary code, schemas, or data**.
 
-| File | Platform | Pattern Demonstrated |
-|:---|:---|:---|
-| [rolling_revenue_yoy.sql](sql/rolling_revenue_yoy.sql) | Generic ANSI SQL | Window functions, rolling aggregates, YoY comparisons |
-| [cohort_retention.sql](sql/cohort_retention.sql) | Generic ANSI SQL | Cohort analysis, retention rates, cumulative revenue |
-| [budget_vs_actual.sql](sql/budget_vs_actual.sql) | Generic ANSI SQL | Variance analysis, favorable/unfavorable flagging |
-| [headcount_monthly.sql](sql/headcount_monthly.sql) | Generic ANSI SQL | Point-in-time headcount, month-over-month trends |
+### ANSI SQL patterns
+
+| File | Pattern Demonstrated |
+|:---|:---|
+| [rolling_revenue_yoy.sql](sql/rolling_revenue_yoy.sql) | Window functions, rolling aggregates, YoY comparisons |
+| [cohort_retention.sql](sql/cohort_retention.sql) | Cohort analysis, retention rates, cumulative revenue |
+| [budget_vs_actual.sql](sql/budget_vs_actual.sql) | Variance analysis, favorable/unfavorable flagging |
+| [headcount_monthly.sql](sql/headcount_monthly.sql) | Point-in-time headcount, month-over-month trends |
+
+### LookML views — Membership & POS Finance
+
+Generic LookML views illustrating semantic-model patterns for a subscription / membership business with an on-site retail (pro-shop) channel. Schemas, tiers, locations, and rates are placeholders.
+
+| File | Pattern Demonstrated |
+|:---|:---|
+| [membership_churn.view.lkml](sql/membership_churn.view.lkml) | Active / cancelled counts, churn rate, YTD removals, net adds |
+| [membership_vs_goals.view.lkml](sql/membership_vs_goals.view.lkml) | Tiered membership goals (Basic / Standard / Premium / Enterprise), ARR, goal-attainment % |
+| [membership_renewals.view.lkml](sql/membership_renewals.view.lkml) | Subscription renewals, payment-gateway response fields (AVS / CVV / CAVV), renewal success rate |
+| [pos_sales_order_transaction_report.view.lkml](sql/pos_sales_order_transaction_report.view.lkml) | Finance-facing POS daily sales-order report — invoice amount, sales tax, grand total, refunds, discount %, AOV |
 
 ---
 
