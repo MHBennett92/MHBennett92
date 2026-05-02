@@ -1,9 +1,9 @@
 <div align="center">
 
 <!-- Dynamic Typing SVG -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=002856&center=true&vCenter=true&multiline=true&repeat=true&width=700&height=80&lines=Michael+H.+Bennett;FP%26A+Manager+%7C+Business+Intelligence" alt="Typing SVG" /></a>
+<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=002856&center=true&vCenter=true&multiline=true&repeat=true&width=700&height=80&lines=Michael+H.+Bennett;FP%26A+%7C+Business+Intelligence" alt="Typing SVG" /></a>
 
-**Building the connective tissue between financial planning and enterprise data architecture**
+**Your friendly neighborhood FP&A architect — spinning data pipelines into financial forecasts**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/mhbennett)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MHBennett92)
@@ -15,9 +15,9 @@
 
 ## About
 
-I'm an FP&A and Business Intelligence Manager with 8+ years building the connective tissue between financial planning and enterprise data architecture — not just translating numbers into dashboards, but designing the systems, pipelines, and semantic models that make self-service analytics possible across entire organizations.
+I'm experienced in Forecasting Planning & Analysis and Business Intelligence with 8+ years building the connective tissue between financial planning and enterprise data architecture — not just translating numbers into dashboards, but designing the systems, pipelines, and semantic models that make self-service analytics possible across entire organizations. Creating Forecasting systems with the assistance of automated applications.
 
-My career spans Fortune-level media at **Sony Pictures Television**, where I led cross-functional financial planning across eight international LATAM regions, and PE-backed manufacturing at **Staccato**, where I owned end-to-end FP&A and BI architecture for a multi-segment business. I hold an MS in Technology Management (4.0 GPA) and I'm grounded in the conviction that finance leadership requires not just analytical depth, but architectural vision.
+My career spans Fortune-level entertainment at **Sony Pictures Television**, where I led cross-functional financial planning across eight international LATAM regions, and PE-backed manufacturing at **Staccato 2011**, where I owned end-to-end FP&A and BI architecture for a multi-segment business. I hold an M.S. in Technology Management (MIS & AI) and operate from the conviction that finance leadership in modern organizations requires not just analytical depth, but architectural vision.
 
 <div align="center">
 
@@ -28,7 +28,7 @@ My career spans Fortune-level media at **Sony Pictures Television**, where I led
 | Reporting Automation | **85%** reduction in manual reporting errors |
 | T&E Processing Errors | **95%** eliminated through automation |
 | Expense Processing Speed | **40%** faster cycle time |
-| Cross-Departmental BI Adoption | Scaled to **10+ departments** |
+| Cross-Departmental BI Adoption | Scaled to **10+ departments and 80+ users** |
 
 </div>
 
@@ -88,11 +88,12 @@ My career spans Fortune-level media at **Sony Pictures Television**, where I led
 **Austin, TX · November 2024 – May 2026**
 
 - Owned end-to-end FP&A for a PE-backed manufacturing and consumer-sports business, building driver-based annual budgets and rolling forecasts across multiple P&L segments and delivering board-level ROI/scenario models, variance analysis, and capital investment recommendations that directly informed executive and PE-sponsor decisions.
-- Architected a hub-and-spoke enterprise BI platform on **Looker, Azure Synapse, and BigQuery**, scaling real-time GAAP/EBITDA dashboards to **10+ departments and 80+ users** and eliminating significant monthly hours of manual Excel reporting.
-- Authored LookML semantic models across department-scoped projects with EBITDA logic, Liquid KPI thresholds, period-over-period measures, and role-based access controls; enforced PR-based CI workflows in GitHub.
-- Engineered scalable ETL/ELT pipelines via **Azure Data Factory and T-SQL**, ingesting data from Epicor ERP, Salesforce, BigCommerce, and GA4 into segment-specific LookML semantic models, all versioned with CI-enforced PR workflows.
-- Partnered with Finance, Accounting, and PMO on G/L analysis, monthly journal entry validation, SOX compliance, and data integrity assurance across business segments during an active ERP transition, ensuring clean cost allocation.
-- Managed and led cross-functional projects with the IT and Finance teams, serving as the strategic bridge between data infrastructure and executive leadership, delegating SQL, LookML, and pipeline engineering tasks via GitHub pull requests and aligning all deliverables to monthly close, segment-level forecasting cycles, and board package deadlines.
+- Architected a hub-and-spoke enterprise BI platform on **Looker, Azure Synapse, and BigQuery**, scaling real-time GAAP/EBITDA dashboards to **10+ departments and 80+ users**, eliminating significant monthly hours of manual Excel reporting and replacing ad hoc reporting requests with governed self-service analytics.
+- Designed and authored LookML semantic models across department-scoped projects covering EBITDA logic, Liquid KPI thresholds, period-over-period measures, and role-based access controls; enforced PR-based CI workflows in GitHub to maintain model integrity across the enterprise.
+- Engineered scalable ETL/ELT pipelines via **Azure Data Factory and T-SQL**, ingesting data from Epicor ERP, Salesforce, BigCommerce, and GA4 into segment-specific LookML semantic models covering order-to-cash, membership ARR and churn, gross margin, inventory, and WIP allocation.
+- Led the design and delivery of a membership analytics reporting layer used by the Membership team, Ecommerce, Finance, C-suite, and board stakeholders — solving persistent data quality challenges including duplicate accounts, inconsistent cancellation records, and inaccurate member attributes to produce finance-grade ARR and churn reporting.
+- Partnered with Finance, Accounting, and PMO on G/L analysis, monthly journal entry validation, SOX compliance, and data integrity assurance across business segments during an active ERP transition, ensuring clean cost allocation between manufacturing, membership, ecommerce, and capital project P&L lines.
+- Served as strategic bridge between IT data infrastructure and executive leadership — managing cross-functional project delivery by delegating SQL, LookML, and pipeline engineering tasks via GitHub pull requests and aligning all deliverables to monthly close cycles, forecasting calendars, and board package deadlines.
 
 ### Senior Financial Planning Analyst — Sony Pictures Television
 **Miami, FL · March 2018 – June 2024**
@@ -103,8 +104,8 @@ My career spans Fortune-level media at **Sony Pictures Television**, where I led
 - Designed and deployed an **automated T&E reporting system** that eliminated **95% of manual errors** and accelerated expense processing by **40%**, recovering **20+ hours per month** in administrative capacity.
 - Built multi-year scenario models for content investments and distribution deals, evaluating payback periods, NPV, and ROI to support greenlight decisions and portfolio strategy.
 - Managed affiliate and ad sales revenue recognition across linear and digital channels, coordinating with regional teams on billing accuracy, collections, and monthly AR reporting.
-- Developed and presented monthly and quarterly business review decks to corporate and regional leadership, translating complex financial results into executive-level narratives.
-- Led finance systems modernization initiative evaluating **Workday Adaptive Planning** for EPM migration, documenting current-state SAP workflows, and defining requirements to transition.
+- Developed and presented monthly and quarterly business review decks to corporate and regional leadership, translating complex financial results into executive-level narratives with variance explanations and forward-looking recommendations.
+- Led finance systems modernization initiative evaluating **Workday Adaptive Planning** for EPM migration, documenting current-state SAP workflows and defining functional requirements for transition.
 
 ---
 
@@ -112,7 +113,7 @@ My career spans Fortune-level media at **Sony Pictures Television**, where I led
 
 ### Driver-Based Planning Framework
 
-I build financial models grounded in operational drivers, not static line items. This approach connects business activities directly to financial outcomes.
+A great financial model, like a great origin story, starts with cause and effect — not assumptions. I build driver-based frameworks that connect operational activity directly to financial outcomes.
 
 ```mermaid
 graph LR
@@ -167,11 +168,11 @@ graph LR
 
 ---
 
-## SQL & LookML Learning Portfolio
+## Financial Technical Portfolio
 
-The `/sql` folder contains generic, tutorial-style SQL and LookML patterns I've written to demonstrate data modeling techniques commonly used in FP&A and BI work — including subscription / membership analytics and finance-facing POS reporting. These are illustrative examples built from publicly documented patterns — **not derived from any employer's proprietary code, schemas, or data**.
+The `/sql` folder contains SQL and LookML patterns that reflect the types of problems I solve in FP&A and BI work — including subscription and membership analytics, finance-facing Point of Sale (POS) reporting, variance analysis, and cohort retention modeling.
 
-### ANSI SQL patterns
+### ANSI SQL Patterns
 
 | File | Pattern Demonstrated |
 |:---|:---|
@@ -180,16 +181,30 @@ The `/sql` folder contains generic, tutorial-style SQL and LookML patterns I've 
 | [budget_vs_actual.sql](sql/budget_vs_actual.sql) | Variance analysis, favorable/unfavorable flagging |
 | [headcount_monthly.sql](sql/headcount_monthly.sql) | Point-in-time headcount, month-over-month trends |
 
-### LookML views — Membership & POS Finance
+### LookML Views — Membership & POS Finance
 
-Generic LookML views illustrating semantic-model patterns for a subscription / membership business with an on-site retail (pro-shop) channel. Schemas, tiers, locations, and rates are placeholders.
+LookML semantic model patterns for a subscription and membership business with an on-site retail channel, structured to support Finance, Operations, and executive reporting across ARR pacing, churn, renewals, and daily POS transactions.
 
 | File | Pattern Demonstrated |
 |:---|:---|
 | [membership_churn.view.lkml](sql/membership_churn.view.lkml) | Active / cancelled counts, churn rate, YTD removals, net adds |
-| [membership_vs_goals.view.lkml](sql/membership_vs_goals.view.lkml) | Tiered membership goals (Basic / Standard / Premium / Enterprise), ARR, goal-attainment % |
-| [membership_renewals.view.lkml](sql/membership_renewals.view.lkml) | Subscription renewals, payment-gateway response fields (AVS / CVV / CAVV), renewal success rate |
+| [membership_vs_goals.view.lkml](sql/membership_vs_goals.view.lkml) | Tiered membership goals, ARR forecasting, goal-attainment % |
+| [membership_renewals.view.lkml](sql/membership_renewals.view.lkml) | Subscription renewals, payment-gateway response fields, renewal success rate |
 | [pos_sales_order_transaction_report.view.lkml](sql/pos_sales_order_transaction_report.view.lkml) | Finance-facing POS daily sales-order report — invoice amount, sales tax, grand total, refunds, discount %, AOV |
+
+### Membership Analytics Dashboard
+
+A LookML dashboard pattern built on top of the membership semantic layer above, delivering a consolidated view of ARR performance, churn trends, renewal revenue, and goal attainment for Finance, Membership Operations, Ecommerce, C-suite, and board stakeholders.
+
+This type of dashboard solves a real and common problem in subscription businesses: source data from CRM and POS systems often arrives with duplicate accounts, inconsistent cancellation records, and inaccurate member attributes. Getting to a single, trusted ARR number — one that Finance can use for forecasting and the board can use for performance review — requires both data engineering discipline and finance-grade metric design.
+
+| Dashboard Section | Business Purpose |
+|:---|:---|
+| **ARR & Goal Attainment** | Tracks current ARR vs. annual and monthly targets by tier; powers Finance forecasting and PE-sponsor reporting |
+| **Churn & Net Adds** | Active member counts, gross adds, cancellations, and net adds by tier; surfaces retention risk early |
+| **Renewals & Revenue** | Month-to-date renewal ARR, success rate, and average ARR per renewal; supports Growth and Ecommerce planning |
+
+The dashboard uses three underlying LookML views (`membership_vs_goals`, `membership_churn`, `membership_renewals`) with dynamic dashboard filters, table calculations for pacing logic, and conditional formatting to signal performance against targets in real time.
 
 ---
 
