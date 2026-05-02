@@ -216,7 +216,7 @@ gantt
 
 | Degree | Institution | Year | Details |
 |:---|:---|:---|:---|
-| **M.S. Technology Management** | University of Arizona, Global Campus | 2025 | GPA: 4.0 |
+| **M.S. Technology Management** | University of Arizona, Global Campus | 2025 | Technology Management & Autonomous Systems |
 | **B.S. General Studies** | University of West Florida, Pensacola, FL | 2017 | Management Information Systems & e-Business |
 
 ---
